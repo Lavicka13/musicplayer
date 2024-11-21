@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import useSound from "use-sound";
-import mot from "../src/assets/motivational-electronic-distant-132919.mp3";
 import { AiFillPlayCircle, AiFillPauseCircle } from "react-icons/ai";
 import { BiSkipNext, BiSkipPrevious } from "react-icons/bi";
 import { IconContext } from "react-icons";
@@ -10,7 +9,14 @@ import "./App.css";
 const mockApiFetch = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve({
+      resolve(
+        {
+          title: "Muladara chakra music",
+          artist: "BluBonRelaXon",
+          cover: "../public/Assets/Images/chill.jpg",
+          song: "../public/Assets/songs/background-music-for-trailer-amp-shorts-184413.mp3"
+        }, 
+        {
         title: "Motivational Electronic",
         artist: "Alex-Productions",
         cover: "../public/Assets/Images/electronic.jpg",
@@ -22,12 +28,7 @@ const mockApiFetch = () => {
       cover: "../public/Assets/Images/electronic.jpg",
       song: "../public/Assets/songs/cinematic-adventure-alive-135518.mp3"
     },
-    {
-      title: "Muladara chakra music",
-      artist: "BluBonRelaXon",
-      cover: "../public/Assets/Images/chill.jpg",
-      song: "../public/Assets/songs/background-music-for-trailer-amp-shorts-184413.mp3"
-    }, 
+    
     {
       title: "Ambient Dreamy | Clouds",
       artist: "Alex-Productions 23",
@@ -53,7 +54,7 @@ const mockApiFetch = () => {
 
 function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [play, { pause, sound, duration, error }] = useSound(mot);
+  const [play, { pause, sound, duration, error }] = useSound(songData.song);
 
   const [currTime, setCurrTime] = useState({ min: "00", sec: "00" });
   const [seconds, setSeconds] = useState(0); // Current position in seconds
@@ -101,6 +102,10 @@ function MusicPlayer() {
       setIsPlaying(true);
     }
   };
+
+  const nextButton = () => {
+
+  }
 
   if (error) {
     console.error("Error loading sound file:", error);
@@ -172,7 +177,7 @@ function MusicPlayer() {
             </IconContext.Provider>
           </button>
         )}
-        <button className="playButton">
+        <button className="playButton" onClick={nextButton}>
           <IconContext.Provider value={{ size: "3em", color: "#27AE60" }}>
             <BiSkipNext />
           </IconContext.Provider>
