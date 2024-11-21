@@ -6,12 +6,58 @@ import { BiSkipNext, BiSkipPrevious } from "react-icons/bi";
 import { IconContext } from "react-icons";
 import "./App.css";
 
+// Mock API Funktion
+const mockApiFetch = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        title: "Motivational Electronic",
+        artist: "Alex-Productions",
+        cover: "../public/Assets/Images/electronic.jpg",
+        song: "../public/Assets/songs/motivational-electronic-distant-132919.mp3"
+      },
+      {
+      title: "Cinematic Adventure | Alive",
+      artist: "Alex-Productions 23",
+      cover: "../public/Assets/Images/electronic.jpg",
+      song: "../public/Assets/songs/cinematic-adventure-alive-135518.mp3"
+    },
+    {
+      title: "Muladara chakra music",
+      artist: "BluBonRelaXon",
+      cover: "../public/Assets/Images/chill.jpg",
+      song: "../public/Assets/songs/background-music-for-trailer-amp-shorts-184413.mp3"
+    }, 
+    {
+      title: "Ambient Dreamy | Clouds",
+      artist: "Alex-Productions 23",
+      cover: "../public/Assets/Images/chill.jpg",
+      song: "../public/Assets/songs/ambient-dreamy-clouds-135528.mp3"
+    },
+    /* {
+      title: "",
+      artist: "",
+      cover: "../public/Assets/Images",
+      song: "../public/Assets/songs"
+    },
+    {
+      title: "",
+      artist: "",
+      cover: "../public/Assets/Images",
+      song: "../public/Assets/songs"
+    }, */
+    );
+    }, 2000); // Simulierte Verzögerung von 2 Sekunden
+  });
+};
+
 function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [play, { pause, sound, duration, error }] = useSound(mot);
 
   const [currTime, setCurrTime] = useState({ min: "00", sec: "00" });
   const [seconds, setSeconds] = useState(0); // Current position in seconds
+  const [songData, setSongData] = useState(null); // API-Daten für Song
 
   // Cleanup: Stop sound when component unmounts
   useEffect(() => {
@@ -19,6 +65,13 @@ function MusicPlayer() {
       sound?.stop();
     };
   }, [sound]);
+
+  // Simulierte API-Aufrufe
+  useEffect(() => {
+    mockApiFetch().then((data) => {
+      setSongData(data); // Daten aus der Mock-API speichern
+    });
+  }, []);
 
   // Update the current time every second
   useEffect(() => {
@@ -61,15 +114,22 @@ function MusicPlayer() {
   return (
     <div className="component">
       <h2>Playing Now</h2>
-      <img
-        className="musicCover"
-        src="https://picsum.photos/200/200"
-        alt="Music Cover"
-      />
-      <div>
-        <h3 className="title">Rubaiyyan</h3>
-        <p className="subTitle">Qala</p>
-      </div>
+      {/* Zeige einen Ladehinweis, falls die API-Daten noch nicht geladen sind */}
+      {!songData ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <img
+            className="musicCover"
+            src={songData.cover}
+            alt="Music Cover"
+          />
+          <div>
+            <h3 className="title">{songData.title}</h3>
+            <p className="subTitle">{songData.artist}</p>
+          </div>
+        </>
+      )}
       <div>
         <div className="time">
           <p>
@@ -80,16 +140,18 @@ function MusicPlayer() {
             {String(durationSeconds).padStart(2, "0")}
           </p>
         </div>
-        <input
-          type="range"
-          min="0"
-          max={totalDuration}
-          value={seconds}
-          className="timeline"
-          onChange={(e) => {
-            sound.seek(Number(e.target.value)); // Seek to the selected time
-          }}
-        />
+        <div className="timelinecenter">
+          <input
+            type="range"
+            min="0"
+            max={totalDuration}
+            value={seconds}
+            className="timeline"
+            onChange={(e) => {
+              sound.seek(Number(e.target.value)); // Seek to the selected time
+            }}
+          />
+        </div>
       </div>
       <div>
         <button className="playButton">
