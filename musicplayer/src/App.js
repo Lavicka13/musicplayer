@@ -39,7 +39,7 @@ const mockApiFetch = () => {
           sound: "/Assets/songs/ambient-dreamy-clouds-135528.mp3", // Pfad zur Songdatei
         },
       ]);
-    }, 1000); // Simulieren einer Antwort nach 1 Sekunde
+    }, 10); // Simulieren einer Antwort nach 1 Sekunde
   }); 
 };
   // Zustand für aktuelle Zeit und Song-Daten
@@ -56,8 +56,9 @@ const mockApiFetch = () => {
 
   // useSound Hook für das Abspielen von Audio
   const [play, { pause, sound, duration, error }] = useSound(
-    currentSong?.sound || "", // Pfad zum Song
+    currentSong?.sound || "/Assets/songs/background-music-for-trailer-amp-shorts-184413.mp3", // Pfad zum Song
     { soundEnabled: currentSong !== null && currentSong !== undefined }
+
   );
   console.log(currentSong?.song);
 
@@ -101,17 +102,19 @@ const mockApiFetch = () => {
       setIsPlaying(true);  // Setzt den Zustand auf "abspielend"
     }
   };
-  
-  
-
   // Funktion zum Wechseln zum nächsten Song
   const nextButton = () =>
     setCurrentSongIndex((prev) => (prev + 1) % songs.length); // Zyklich durch die Songs wechseln
+    if (isPlaying) {
+      play(); // Spielt den nächsten Song ab, falls der Player aktiv ist
+    }
 
   // Funktion zum Wechseln zum vorherigen Song
   const previousButton = () =>
-    setCurrentSongIndex((prev) => (prev === 0 ? songs.length - 1 : prev - 1)); // Zyklich rückwärts durch die Songs wechseln
-
+    setCurrentSongIndex((prev) => (prev === 0 ? songs.length - 1 : prev - 1));
+  if (isPlaying) {
+    play(); 
+  } 
   // Fehlerbehandlung, wenn der Song nicht geladen werden kann
   if (error) {
     console.error("Error loading sound file:", error); // Fehler im Konsolenlog ausgeben
@@ -126,11 +129,6 @@ const mockApiFetch = () => {
   // Berechnung der gesamten Dauer des Songs in Minuten und Sekunden
   const totalDuration = duration ? duration / 1000 : 0;
 
-  console.log('currentSong:', currentSong);
-  console.log('isPlaying:', isPlaying);
-  console.log('sound:', sound);
-  console.log('currentTime (seconds):', seconds);
-  console.log('duration:', duration);
   // Rendern der Musikplayer-Komponente
   return (
     <div background>
