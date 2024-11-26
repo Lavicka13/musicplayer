@@ -1,13 +1,10 @@
-import { useEffect, useState } from "react"; // React-Hooks: useEffect und useState
-import useSound from "use-sound"; // Hook für das Abspielen von Sounds
-import { AiFillPlayCircle, AiFillPauseCircle } from "react-icons/ai"; // Play/Pause-Symbole von react-icons
-import { BiSkipNext, BiSkipPrevious } from "react-icons/bi"; // Next/Previous-Symbole von react-icons
+import { useEffect, useState } from "react"; 
+import useSound from "use-sound";
+import { AiFillPlayCircle, AiFillPauseCircle } from "react-icons/ai"; 
+import { BiSkipNext, BiSkipPrevious } from "react-icons/bi"; 
 import { IconContext } from "react-icons"; // Um die Größe und Farbe der ICONS zu steuern
 import "./App.css"; 
 
-
-
-// 
 function MusicPlayer() {
   // Mock API Funktion, die eine Liste von Songs simuliert
 const mockApiFetch = () => {
@@ -39,7 +36,7 @@ const mockApiFetch = () => {
           sound: "/Assets/songs/ambient-dreamy-clouds-135528.mp3", // Pfad zur Songdatei
         },
       ]);
-    }, 10); // Simulieren einer Antwort nach 1 Sekunde
+    }, 10); 
   }); 
 };
   // Zustand für aktuelle Zeit und Song-Daten
@@ -49,19 +46,15 @@ const mockApiFetch = () => {
   const [currentSongIndex, setCurrentSongIndex] = useState(0); // Index des aktuell abgespielten Songs
   const [isPlaying, setIsPlaying] = useState(false); // Zustand, ob der Song abgespielt wird
   
-
   // Holen des aktuellen Songs basierend auf dem Index
   const currentSong = songs[currentSongIndex];
   console.log(currentSong);
 
   // useSound Hook für das Abspielen von Audio
   const [play, { pause, sound, duration, error }] = useSound(
-    currentSong?.sound || "/Assets/songs/background-music-for-trailer-amp-shorts-184413.mp3", // Pfad zum Song
+    currentSong?.sound || "/Assets/songs/background-music-for-trailer-amp-shorts-184413.mp3", 
     { soundEnabled: currentSong !== null && currentSong !== undefined }
-
   );
-  console.log(currentSong?.song);
-
 
   // useEffect Hook zum Abrufen der Songs von der mock API
   useEffect(() => {
@@ -87,8 +80,6 @@ const mockApiFetch = () => {
   
     return () => clearInterval(interval);
   }, [sound]);
-  
-  
 
   // Funktion, die den Play/Pause Button steuert
   const playingButton = () => {
@@ -112,7 +103,7 @@ const mockApiFetch = () => {
   // Funktion zum Wechseln zum vorherigen Song
   const previousButton = () =>
     setCurrentSongIndex((prev) => (prev === 0 ? songs.length - 1 : prev - 1));
-  if (isPlaying) {
+    if (isPlaying) {
     play(); 
   } 
   // Fehlerbehandlung, wenn der Song nicht geladen werden kann
@@ -143,7 +134,7 @@ const mockApiFetch = () => {
           <h3 className="title">{currentSong.title}</h3> {/* Song-Titel */}
           <p className="subTitle">{currentSong.artist}</p> {/* Künstlername */}
         </div>
-        <div>
+        <div className="buttons">
           <div className="time">
             <p>{currTime.min}:{currTime.sec}</p> {/* Aktuelle Zeit */}
             <p>
@@ -187,4 +178,4 @@ const mockApiFetch = () => {
   );
 }
 
-export default MusicPlayer; // Exportieren der Musikplayer-Komponente
+export default MusicPlayer; 
